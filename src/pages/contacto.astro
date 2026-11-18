@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const asunto = 'Interés en colaborar con la Factoría de Proyectos';
+const cuerpo =
+  'Hola:%0A%0AMe pongo en contacto con vosotros porque...%0A%0AUn saludo.';
+---
+
+<BaseLayout
+  title="Contacto"
+  description="Contacta con la Factoría de Proyectos del IES San Alberto Magno de Sabiñánigo: correo, teléfono y dirección del centro."
+>
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="antetitulo">Contacto</p>
+      <h1>Hablemos</h1>
+      <p class="entradilla">
+        ¿Tienes una idea, un encargo o una duda? Escríbenos al correo de la
+        Factoría y te contestamos desde el departamento de Informática.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion" style="padding-top: 0">
+    <div class="contenedor">
+      <ul class="contacto-rejilla">
+        <li>
+          <div class="dato">
+            <span class="dato__clave">Correo electrónico</span>
+            <span class="dato__valor">
+              <a href="mailto:factoriadeproyectos@iessanalberto.com">
+                factoriadeproyectos@iessanalberto.com
+              </a>
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="dato">
+            <span class="dato__clave">Teléfono del centro</span>
+            <span class="dato__valor">
+              <a href="tel:+34974480179">974 480 179</a>
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="dato">
+            <span class="dato__clave">Dirección</span>
+            <span class="dato__valor">
+              Paseo La Corona, 2<br />
+              22600 Sabiñánigo (Huesca)
+            </span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="lectura" style="margin-top: 3rem">
+        <h2>Escribirnos directamente</h2>
+        <p>
+          La forma más rápida de contactar con nosotros es el correo. Si nos
+          cuentas en qué estás pensando, podemos valorar si el proyecto encaja
+          con lo que el alumnado tiene que aprender este curso.
+        </p>
+        <p>
+          <a
+            class="boton boton--primario"
+            href={`mailto:factoriadeproyectos@iessanalberto.com?subject=${encodeURIComponent(asunto)}&body=${cuerpo}`}
+          >
+            Escribir un correo
+          </a>
+        </p>
+        <p>
+          También puedes venir a vernos. El instituto está en el centro de
+          Sabiñánigo, y el taller de Informática está abierto para quien quiera
+          conocer los proyectos antes de proponer uno.
+        </p>
+
+        <h2>Cómo llegar</h2>
+        <p>
+          Estamos en el Paseo La Corona, junto al centro de la villa. Puedes
+          abrir la ubicación en
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=IES+San+Alberto+Magno+Paseo+La+Corona+2+Sabi%C3%B1%C3%A1nigo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google Maps
+          </a>.
+        </p>
+
+        <div class="aviso" style="margin-top: 2rem">
+          <span>
+            <strong>Privacidad.</strong> Los datos que nos envíes se usarán solo
+            para responderte. Esta web no recoge datos personales ni utiliza
+            cookies de seguimiento.
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

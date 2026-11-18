@@ -1,0 +1,87 @@
+---
+interface Video {
+  id: string;
+  titulo: string;
+}
+
+interface Props {
+  videos: Video[];
+  /** Texto del encabezado visible, opcional. */
+  titulo?: string;
+  /** Canal de YouTube al que se puede enlazar, opcional. */
+  canal?: string;
+}
+
+const { videos, titulo = 'Vídeos', canal } = Astro.props;
+const hayVideos = videos.length > 0;
+---
+
+{
+  hayVideos && (
+    <section class="videos" aria-labelledby="titulo-videos">
+      <h2 id="titulo-videos">{titulo}</h2>
+      <p class="videos__ayuda">
+        Pulsa sobre un vídeo para verlo. La miniatura se carga desde YouTube,
+        pero hasta que no pulses no se activa ninguna cookie.
+      </p>
+
+      <ul class="videos__rejilla">
+        {videos.map((video) => (
+          <li>
+            <div class="video" data-video={video.id}>
+              <button
+                type="button"
+                class="video__boton"
+                aria-label={`Reproducir el vídeo: ${video.titulo}`}
+              >
+                <img
+                  src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+                  alt=""
+                  width="480"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="video__play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+              </button>
+              <p class="video__titulo">{video.titulo}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {canal && (
+        <p class="videos__canal">
+          Más vídeos en <a href={canal} target="_blank" rel="noopener noreferrer">el canal de YouTube</a>.
+        </p>
+      )}
+    </section>
+  )
+}
+
+<script>
+  // Sustituye la miniatura por el reproductor solo cuando el usuario lo pide:
+  // así no se cargan ocho iframes ni se activan cookies sin consentimiento.
+  document.querySelectorAll<HTMLElement>('[data-video]').forEach((contenedor) => {
+    const boton = contenedor.querySelector<HTMLButtonElement>('.video__boton');
+    const id = contenedor.dataset.video;
+    if (!boton || !id) return;
+
+    boton.addEventListener('click', () => {
+      const titulo = contenedor.querySelector('.video__titulo')?.textContent ?? 'Vídeo';
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.title = titulo;
+      iframe.allow =
+        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.allowFullscreen = true;
+      iframe.loading = 'lazy';
+      iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      contenedor.replaceChildren(iframe);
+    });
+  });
+</script>

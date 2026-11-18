@@ -1,0 +1,18 @@
+{
+  "name": "factoria-de-proyectos",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Web pública de la FP2 Factoría de Proyectos del IES San Alberto Magno (Sabiñánigo)",
+  "scripts": {
+    "dev": "node scripts/run-astro.mjs dev",
+    "start": "node scripts/run-astro.mjs dev",
+    "build": "node scripts/run-astro.mjs build",
+    "preview": "node scripts/run-astro.mjs preview",
+    "check": "node scripts/run-astro.mjs check",
+    "publicar": "node scripts/publicar.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.4.12"
+  }
+}

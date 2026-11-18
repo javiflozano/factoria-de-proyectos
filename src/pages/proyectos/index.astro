@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProyectoCard from '../../components/ProyectoCard.astro';
+
+const proyectos = (await getCollection('proyectos')).sort(
+  (a, b) => a.data.orden - b.data.orden
+);
+
+const destacados = proyectos.filter((p) => p.data.estado === 'destacado');
+const enDesarrollo = proyectos.filter((p) => p.data.estado === 'desarrollo');
+---
+
+<BaseLayout
+  title="Proyectos"
+  description="Catálogo de proyectos de la Factoría de Proyectos del IES San Alberto Magno de Sabiñánigo: apps premiadas, patrimonio, accesibilidad y emprendimiento."
+>
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="antetitulo">Catálogo</p>
+      <h1>Proyectos</h1>
+      <p class="entradilla">
+        Todo lo que ha salido del taller de Informática del IES San Alberto Magno.
+        Cada ficha cuenta qué se hizo, con quién y qué se aprendió.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion" style="padding-top: 0">
+    <div class="contenedor">
+      <h2>Proyectos destacados</h2>
+      <ul class="rejilla">
+        {
+          destacados.map((proyecto) => (
+            <li>
+              <ProyectoCard proyecto={proyecto} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion seccion--gris">
+    <div class="contenedor">
+      <h2>En desarrollo</h2>
+      <p class="entradilla">
+        Los proyectos que este curso están en el taller. Todavía no están
+        terminados, pero ya se puede contar en qué consisten.
+      </p>
+      <ul class="rejilla" style="margin-top: 1.8rem">
+        {
+          enDesarrollo.map((proyecto) => (
+            <li>
+              <ProyectoCard proyecto={proyecto} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

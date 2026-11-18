@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GaleriaVideos from '../components/GaleriaVideos.astro';
+import { profesorado } from '../data/profesorado';
+import { ruta } from '../lib/rutas';
+
+const videoSmr = [{ id: 'ROF5yxHNzWw', titulo: 'IES San Alberto Magno - Nuevo ciclo SMR' }];
+
+const iniciales = (nombre: string) =>
+  nombre
+    .split(/\s+/)
+    .map((parte) => parte[0]?.toUpperCase() ?? '')
+    .join('');
+---
+
+<BaseLayout
+  title="Quiénes somos"
+  description="El departamento de Informática del IES San Alberto Magno de Sabiñánigo y los dos ciclos de Formación Profesional que hacen posible la Factoría de Proyectos."
+>
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="antetitulo">Quiénes somos</p>
+      <h1>El equipo que hay detrás del taller</h1>
+      <p class="entradilla">
+        Somos el departamento de Informática del IES San Alberto Magno, un centro
+        público de Sabiñánigo (Huesca) que imparte Formación Profesional de la
+        familia de Informática y Comunicaciones desde el curso 2016-17.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion" style="padding-top: 0">
+    <div class="contenedor">
+      <div class="lectura">
+        <h2>Un instituto de pueblo con vocación industrial</h2>
+        <p>
+          Sabiñánigo es una villa industrial del Alto Gállego, a medio camino entre
+          Huesca y el Pirineo. El instituto nació al calor de las fábricas de
+          química y aluminio, y esa cultura de taller, de hacer cosas que
+          funcionan, sigue muy viva en nuestras aulas.
+        </p>
+        <p>
+          La Factoría de Proyectos es la manera que tenemos de enseñar
+          programación: con encargos reales, con usuarios que esperan algo, con
+          una entrega al final del curso. El alumnado no aprende un lenguaje para
+          aprobar; lo aprende para resolverle un problema a alguien.
+        </p>
+
+        <h2>Cómo trabajamos</h2>
+        <ul>
+          <li>
+            <strong>Un encargo, un cliente.</strong> Cada proyecto parte de una
+            necesidad planteada desde fuera del aula: una institución, una
+            asociación, una entidad social o el propio centro.
+          </li>
+          <li>
+            <strong>Trabajo por equipos con roles.</strong> Análisis, diseño,
+            desarrollo, pruebas y documentación. Como en cualquier empresa, pero
+            con tiempo para equivocarse.
+          </li>
+          <li>
+            <strong>Entrega pública.</strong> El proyecto se documenta, se
+            presenta y se publica. Si no se puede contar, no está terminado.
+          </li>
+          <li>
+            <strong>Colaboración entre ciclos.</strong> El Grado Medio y el Grado
+            Superior comparten proyectos: unos montan la infraestructura, otros
+            programan la aplicación.
+          </li>
+        </ul>
+
+        <h2>Con quién colaboramos</h2>
+        <p>
+          A lo largo de los años hemos trabajado con administraciones, empresas y
+          entidades del territorio: el Gobierno de Aragón a través de sus
+          convocatorias de innovación educativa, Renfe y Adif en el proyecto
+          Canfranero, la Subdelegación del Gobierno en Huesca en la app de Puntos
+          Violeta, la Fundación Valentia, el IES Martínez Vargas de Barbastro y
+          los ayuntamientos de la comarca, entre otros.
+        </p>
+      </div>
+
+      <h2 style="margin-top: 3.5rem">El equipo</h2>
+      <p class="entradilla">
+        Somos siete profesores en el departamento, entre el Grado Medio y el
+        Grado Superior. Cada proyecto lo lleva uno o dos, pero se revisa entre
+        todos.
+      </p>
+
+      <ul class="equipo">
+        {
+          profesorado.map((docente) => (
+            <li>
+              <article class="persona">
+                {
+                  docente.foto ? (
+                    <img
+                      class="persona__foto"
+                      src={ruta(docente.foto)}
+                      alt={`Fotografía de ${docente.nombre}`}
+                      width="96"
+                      height="96"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span class="persona__iniciales" aria-hidden="true">
+                      {iniciales(docente.nombre)}
+                    </span>
+                  )
+                }
+                <h3>{docente.nombre}</h3>
+                <p class="persona__rol">{docente.rol}</p>
+                <p class="persona__bio">{docente.bio}</p>
+                <p class="persona__ciclos">{docente.ciclos.join(' · ')}</p>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+
+      <GaleriaVideos videos={videoSmr} titulo="El ciclo, en vídeo" />
+
+      <div class="lectura">
+        <h2>Dónde estamos</h2>
+        <p>
+          IES San Alberto Magno<br />
+          Paseo La Corona, 2<br />
+          22600 Sabiñánigo (Huesca)<br />
+          Teléfono: <a href="tel:+34974480179">974 480 179</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--gris">
+    <div class="contenedor">
+      <p class="antetitulo">Los ciclos</p>
+      <h2>Qué se estudia aquí</h2>
+
+      <ul class="ciclos" style="margin-top: 1.8rem">
+        <li>
+          <article class="ciclo">
+            <h3>Sistemas Microinformáticos y Redes</h3>
+            <p>
+              Grado Medio, dos cursos. Implantación de sistemas operativos,
+              montaje de equipos, redes locales, servicios en red y atención al
+              usuario. Es la puerta de entrada a la informática y el ciclo con el
+              que nació la Factoría.
+            </p>
+          </article>
+        </li>
+        <li>
+          <article class="ciclo">
+            <h3>Desarrollo de Aplicaciones Multiplataforma</h3>
+            <p>
+              Grado Superior, dos cursos. Programación en Java y Kotlin, bases de
+              datos, acceso a datos, interfaces, aplicaciones móviles, desarrollo
+              web y despliegue. Aquí se firman las apps de este catálogo.
+            </p>
+          </article>
+        </li>
+      </ul>
+
+      <p style="margin-top: 2.2rem">
+        <a class="boton boton--primario" href={ruta('/proyectos/')}>Ver lo que hacemos</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

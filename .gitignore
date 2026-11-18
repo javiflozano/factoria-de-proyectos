@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+
+# Caché de npm dentro del workspace (ver .npmrc)
+.npm-cache/
+
+# Herramientas locales y credenciales (¡nunca versionar!)
+.tools/
+
+# Cachés de Astro y de utilidades locales
+.cache/
+
+# Capturas de revisión
+shots/
+
+# Salida de Astro
+dist/
+.astro/
+
+# Worktree temporal de publicación (npm run publicar)
+.deploy/
+
+# Entorno
+.env
+.env.*
+!.env.example
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/

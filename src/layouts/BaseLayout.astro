@@ -1,0 +1,152 @@
+---
+import '../styles/global.css';
+import { ruta, absoluta } from '../lib/rutas';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { title, description, image = '/images/logo-factoria.png' } = Astro.props;
+
+const rutaActual = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const baseLimpia = (import.meta.env.BASE_URL ?? '/').replace(/\/+$/, '');
+
+const enlaces = [
+  { href: '/', texto: 'Inicio' },
+  { href: '/proyectos/', texto: 'Proyectos' },
+  { href: '/quienes-somos/', texto: 'Quiénes somos' },
+  { href: '/contacto/', texto: 'Contacto' },
+];
+
+/** Compara la ruta actual con la del enlace, descontando el `base`. */
+function esActiva(href: string): boolean {
+  const relativa = rutaActual.startsWith(baseLimpia)
+    ? rutaActual.slice(baseLimpia.length) || '/'
+    : rutaActual;
+  const destino = href.replace(/\/+$/, '') || '/';
+  return href === '/' ? relativa === '/' : relativa === destino || relativa.startsWith(`${destino}/`);
+}
+
+const tituloCompleto = rutaActual === '/' || rutaActual === baseLimpia
+  ? title
+  : `${title} · FP2 Factoría de Proyectos`;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#303030" />
+    <link rel="icon" type="image/svg+xml" href={ruta('/favicon.svg')} />
+    <link rel="apple-touch-icon" href={ruta('/images/logo-factoria.png')} />
+    <link rel="canonical" href={absoluta(Astro.url.pathname.replace(import.meta.env.BASE_URL, '/'))} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="FP2 Factoría de Proyectos" />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={absoluta(image)} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="cabecera">
+      <div class="contenedor cabecera__barra">
+        <a class="marca" href={ruta('/')}>
+          <img
+            class="marca__logo"
+            src={ruta('/images/logo-factoria.png')}
+            alt=""
+            width="56"
+            height="30"
+          />
+          <span class="marca__texto">
+            <span class="marca__nombre">FP2 Factoría de Proyectos</span>
+            <span class="marca__sub">IES San Alberto Magno · Sabiñánigo</span>
+          </span>
+        </a>
+
+        <nav class="navegacion" aria-label="Navegación principal">
+          <ul>
+            {
+              enlaces.map((enlace) => (
+                <li>
+                  <a
+                    href={ruta(enlace.href)}
+                    aria-current={esActiva(enlace.href) ? 'page' : undefined}
+                  >
+                    {enlace.texto}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="pie">
+      <div class="contenedor">
+        <div class="pie__rejilla">
+          <div>
+            <p class="pie__marca">
+              <img
+                src={ruta('/images/logo-factoria.png')}
+                alt=""
+                width="54"
+                height="29"
+              />
+              FP2 Factoría de Proyectos
+            </p>
+            <p>
+              Proyectos del ciclo de Informática del IES San Alberto Magno de
+              Sabiñánigo: Grado Medio de Sistemas Microinformáticos y Redes y Grado
+              Superior de Desarrollo de Aplicaciones Multiplataforma.
+            </p>
+          </div>
+
+          <div>
+            <h2>Secciones</h2>
+            <ul>
+              {
+                enlaces.map((enlace) => (
+                  <li>
+                    <a href={ruta(enlace.href)}>{enlace.texto}</a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <div>
+            <h2>Contacto</h2>
+            <ul>
+              <li><a href="mailto:factoriadeproyectos@iessanalberto.com">factoriadeproyectos@iessanalberto.com</a></li>
+              <li><a href="tel:+34974480179">974 480 179</a></li>
+              <li>Paseo La Corona, 2<br />22600 Sabiñánigo (Huesca)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pie__legal">
+          <span>© {new Date().getFullYear()} FP2 Factoría de Proyectos</span>
+          <span>
+            Fotografías y materiales de los proyectos del centro. Sin datos
+            personales del alumnado.
+          </span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

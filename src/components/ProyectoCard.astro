@@ -1,0 +1,75 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { ruta } from '../lib/rutas';
+
+interface Props {
+  proyecto: CollectionEntry<'proyectos'>;
+}
+
+const { proyecto } = Astro.props;
+const { data } = proyecto;
+
+const SIGLAS: Array<[RegExp, string]> = [
+  [/Multiplataforma/i, 'DAM'],
+  [/Microinform/i, 'SMR'],
+  [/Animación/i, 'ASC'],
+  [/Secundaria/i, 'ESO'],
+];
+
+const siglas = data.ciclos.map((ciclo) => {
+  const encontrada = SIGLAS.find(([patron]) => patron.test(ciclo));
+  return encontrada ? encontrada[1] : ciclo;
+});
+
+// Portada generada cuando el proyecto no tiene fotografía.
+const iniciales = data.titulo
+  .split(/\s+/)
+  .filter((palabra) => palabra.length > 2)
+  .slice(0, 2)
+  .map((palabra) => palabra[0]?.toUpperCase() ?? '')
+  .join('');
+
+const tienePremio = data.premios.length > 0;
+// Si no hay curso ni año confirmados, no se inventa nada: se omite el dato.
+const cuando = data.curso ?? (data.anio ? String(data.anio) : null);
+const meta = [cuando, siglas.join(' / ')].filter(Boolean).join(' · ');
+---
+
+<a class="tarjeta" href={ruta(`/proyectos/${proyecto.id}/`)}>
+  <div class="tarjeta__media">
+    {
+      data.imagen ? (
+        <img
+          src={ruta(data.imagen)}
+          alt={data.imagenAlt ?? data.titulo}
+          loading="lazy"
+          width="640"
+          height="400"
+        />
+      ) : (
+        <div class="tarjeta__portada" aria-hidden="true">
+          <span>{iniciales}</span>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="tarjeta__cuerpo">
+    <p class="tarjeta__meta">
+      <span>{meta}</span>
+      {
+        tienePremio && (
+          <span class="etiqueta etiqueta--premio">Premiado</span>
+        )
+      }
+      {
+        data.estado === 'desarrollo' && (
+          <span class="etiqueta etiqueta--desarrollo">En desarrollo</span>
+        )
+      }
+    </p>
+    <h3>{data.titulo}</h3>
+    <p>{data.resumen}</p>
+    <span class="tarjeta__pie">Ver el proyecto →</span>
+  </div>
+</a>

@@ -1,0 +1,100 @@
+---
+interface Imagen {
+  src: string;
+  alt: string;
+}
+
+interface Props {
+  imagenes: Imagen[];
+  etiqueta?: string;
+}
+
+const { imagenes, etiqueta = 'Galería de imágenes' } = Astro.props;
+const id = `carrusel-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="carrusel" data-carrusel role="region" aria-label={etiqueta}>
+  <ul class="carrusel__pista" id={id} tabindex="0">
+    {
+      imagenes.map((imagen, indice) => (
+        <li>
+          <figure>
+            <img
+              src={imagen.src}
+              alt={imagen.alt}
+              loading={indice === 0 ? 'eager' : 'lazy'}
+              width="1200"
+              height="750"
+            />
+            <figcaption>{imagen.alt}</figcaption>
+          </figure>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="carrusel__controles">
+    <button class="carrusel__boton" type="button" data-dir="-1" aria-label="Imagen anterior">
+      ‹
+    </button>
+    <button class="carrusel__boton" type="button" data-dir="1" aria-label="Imagen siguiente">
+      ›
+    </button>
+  </div>
+
+  <div class="carrusel__puntos">
+    {
+      imagenes.map((imagen, indice) => (
+        <button
+          type="button"
+          data-ir={indice}
+          aria-label={`Ir a la imagen ${indice + 1}`}
+          aria-current={indice === 0 ? 'true' : 'false'}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  function iniciarCarrusel(raiz: HTMLElement) {
+    const pista = raiz.querySelector<HTMLElement>('.carrusel__pista');
+    const puntos = Array.from(raiz.querySelectorAll<HTMLButtonElement>('[data-ir]'));
+    if (!pista || puntos.length === 0) return;
+
+    const irA = (indice: number) => {
+      const destino = pista.children[indice] as HTMLElement | undefined;
+      if (!destino) return;
+      pista.scrollTo({ left: destino.offsetLeft - pista.offsetLeft, behavior: 'smooth' });
+    };
+
+    raiz.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((boton) => {
+      boton.addEventListener('click', () => {
+        const actual = Math.round(pista.scrollLeft / pista.clientWidth);
+        const siguiente = actual + Number(boton.dataset.dir ?? 1);
+        irA(Math.min(Math.max(siguiente, 0), puntos.length - 1));
+      });
+    });
+
+    puntos.forEach((punto, indice) => {
+      punto.addEventListener('click', () => irA(indice));
+    });
+
+    const sincronizar = () => {
+      const actual = Math.round(pista.scrollLeft / pista.clientWidth);
+      puntos.forEach((punto, indice) => {
+        punto.setAttribute('aria-current', indice === actual ? 'true' : 'false');
+      });
+    };
+
+    pista.addEventListener('scroll', sincronizar, { passive: true });
+
+    raiz.addEventListener('keydown', (evento) => {
+      if (evento.key === 'ArrowLeft') irA(Math.max(0, Math.round(pista.scrollLeft / pista.clientWidth) - 1));
+      if (evento.key === 'ArrowRight')
+        irA(Math.min(puntos.length - 1, Math.round(pista.scrollLeft / pista.clientWidth) + 1));
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-carrusel]').forEach(iniciarCarrusel);
+</script>

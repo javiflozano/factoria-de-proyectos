@@ -1,0 +1,14 @@
+# Normaliza finales de línea: el repo manda LF, se trabaja en Windows sin avisos
+* text=auto eol=lf
+
+# Binarios (no tocar)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

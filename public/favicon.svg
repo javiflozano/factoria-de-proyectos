@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FP2">
+  <rect width="64" height="64" rx="12" fill="#303030" />
+  <rect x="10" y="34" width="44" height="20" fill="#e2571e" />
+  <rect x="16" y="24" width="8" height="12" fill="#e2571e" />
+  <rect x="40" y="24" width="8" height="12" fill="#e2571e" />
+  <text x="32" y="49" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#fff">FP2</text>
+</svg>

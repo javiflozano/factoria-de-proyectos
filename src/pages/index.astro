@@ -1,0 +1,186 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProyectoCard from '../components/ProyectoCard.astro';
+import { ruta } from '../lib/rutas';
+
+const proyectos = (await getCollection('proyectos')).sort(
+  (a, b) => a.data.orden - b.data.orden
+);
+
+const destacados = proyectos.filter((p) => p.data.estado === 'destacado');
+const enDesarrollo = proyectos.filter((p) => p.data.estado === 'desarrollo');
+const conPremio = proyectos.filter((p) => p.data.premios.length > 0);
+---
+
+<BaseLayout
+  title="FP2 Factoría de Proyectos · Informática del IES San Alberto Magno"
+  description="Proyectos reales del alumnado de Formación Profesional del IES San Alberto Magno de Sabiñánigo: aplicaciones, patrimonio, accesibilidad y tecnología con impacto en el territorio."
+>
+  <section class="heroe">
+    <div class="contenedor heroe__interior">
+      <div>
+        <p class="antetitulo" style="color: var(--naranja-claro)">Formación Profesional · Informática</p>
+        <h1>
+          Donde las ideas del aula se convierten en
+          <span class="heroe__titulo-destacado">proyectos reales</span>
+        </h1>
+        <p>
+          En la Factoría de Proyectos del IES San Alberto Magno de Sabiñánigo,
+          el alumnado de Sistemas Microinformáticos y Redes y de Desarrollo de
+          Aplicaciones Multiplataforma programa para gente de verdad: para
+          viajeros, para personas mayores, para quien necesita ayuda.
+        </p>
+        <div class="heroe__acciones">
+          <a class="boton boton--primario" href={ruta('/proyectos/')}>Ver los proyectos</a>
+          <a class="boton boton--claro" href={ruta('/quienes-somos/')}>Quiénes somos</a>
+        </div>
+
+        <div class="heroe__cifras">
+          <div class="cifra">
+            <span class="cifra__valor">{proyectos.length}</span>
+            <span class="cifra__texto">Proyectos publicados</span>
+          </div>
+          <div class="cifra">
+            <span class="cifra__valor">{conPremio.length}</span>
+            <span class="cifra__texto">Reconocidos con premios</span>
+          </div>
+          <div class="cifra">
+            <span class="cifra__valor">2</span>
+            <span class="cifra__texto">Ciclos de informática</span>
+          </div>
+        </div>
+      </div>
+
+      <img
+        class="heroe__logo"
+        src={ruta('/images/logo-factoria.png')}
+        alt="Logotipo de FP2 Factoría de Proyectos"
+        width="500"
+        height="266"
+      />
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="lectura">
+        <p class="antetitulo">Qué es la Factoría</p>
+        <h2>Un taller de software con acento del Pirineo</h2>
+        <p class="entradilla">
+          La Factoría de Proyectos es la forma en que entendemos la Formación
+          Profesional en el IES San Alberto Magno: aprender programando cosas que
+          sirven, con clientes y usuarios reales.
+        </p>
+        <p>
+          Cada curso, el alumnado de los ciclos de Informática se enfrenta a
+          encargos que vienen de fuera del aula: una administración que necesita
+          una app, una asociación que quiere dar a conocer su patrimonio, una
+          entidad social que busca acompañar mejor a las personas a las que
+          atiende. El resultado se publica aquí, con nombre y apellidos del
+          proyecto.
+        </p>
+        <p>
+          No todos ganan premios, y no pasa nada. Lo que buscamos es que cada
+          proyecto tenga un destinatario concreto, una entrega real y una
+          explicación pública de lo que se ha hecho. Eso es lo que separa una
+          práctica de un producto.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--gris">
+    <div class="contenedor">
+      <div class="encabezado-seccion">
+        <div>
+          <p class="antetitulo">Proyectos destacados</p>
+          <h2>Los que más lejos han llegado</h2>
+        </div>
+        <a class="boton boton--fantasma" href={ruta('/proyectos/')}>Todos los proyectos</a>
+      </div>
+
+      <ul class="rejilla">
+        {
+          destacados.map((proyecto) => (
+            <li>
+              <ProyectoCard proyecto={proyecto} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="encabezado-seccion">
+        <div>
+          <p class="antetitulo">Ahora mismo</p>
+          <h2>Proyectos en desarrollo</h2>
+        </div>
+        <p>Lo que está en el taller este curso</p>
+      </div>
+
+      <ul class="rejilla">
+        {
+          enDesarrollo.map((proyecto) => (
+            <li>
+              <ProyectoCard proyecto={proyecto} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion seccion--gris">
+    <div class="contenedor">
+      <p class="antetitulo">Los ciclos</p>
+      <h2>Donde se construye todo esto</h2>
+      <p class="entradilla">
+        Dos ciclos, un mismo taller. Uno se ocupa de las redes y los sistemas;
+        el otro, del software que corre encima.
+      </p>
+
+      <ul class="ciclos" style="margin-top: 2rem">
+        <li>
+          <article class="ciclo">
+            <h3>Sistemas Microinformáticos y Redes</h3>
+            <p>
+              Grado Medio. Implantación y mantenimiento de sistemas, redes
+              locales, seguridad informática y soporte a usuarios. El ciclo con
+              el que arrancó la Factoría en el curso 2016-17.
+            </p>
+          </article>
+        </li>
+        <li>
+          <article class="ciclo">
+            <h3>Desarrollo de Aplicaciones Multiplataforma</h3>
+            <p>
+              Grado Superior. Programación, bases de datos, aplicaciones móviles
+              y desarrollo web. Es el ciclo que firma las apps más ambiciosas del
+              catálogo.
+            </p>
+          </article>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="lectura">
+        <p class="antetitulo">Colabora</p>
+        <h2>¿Tienes un proyecto en mente?</h2>
+        <p class="entradilla">
+          Si eres una empresa, una asociación o una institución del territorio y
+          crees que podemos ayudarte, escríbenos. Cada curso elegimos los
+          encargos que mejor encajan con lo que el alumnado tiene que aprender y
+          con lo que la comarca necesita.
+        </p>
+        <a class="boton boton--primario" href={ruta('/contacto/')}>Hablemos</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
