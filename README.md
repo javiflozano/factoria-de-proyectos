@@ -46,8 +46,10 @@ public/
   images/                  Logo, fotos y carteles
   favicon.svg
   .nojekyll                Evita que GitHub Pages procese el sitio con Jekyll
-.github/workflows/deploy.yml  Publicación automática en GitHub Pages
-docs/TRASPASO.md           Estado del proyecto y decisiones pendientes
+docs/
+  TRASPASO.md              Estado del proyecto y decisiones pendientes
+  despliegue/              Cómo se publica y workflow de Actions de reserva
+scripts/publicar.mjs       Publica en la rama gh-pages
 ```
 
 ## Añadir o editar un proyecto
@@ -85,29 +87,19 @@ si no la tiene, se muestran sus iniciales.
 
 ## Publicar en GitHub Pages
 
-El despliegue es automático: al hacer `push` a `main`,
-`.github/workflows/deploy.yml` compila el sitio y lo publica.
+**Web publicada:** <https://javiflozano.github.io/factoria-de-proyectos/>
 
-Pasos que hay que dar una sola vez en GitHub:
-
-1. Crear el repositorio y subir `main`.
-2. **Settings → Pages → Source: GitHub Actions**.
-3. El primer `push` publica en
-   `https://<usuario>.github.io/<repositorio>/`.
-
-`astro.config.mjs` calcula el `base` solo a partir de `GITHUB_REPOSITORY`:
-
-- repositorio `<usuario>.github.io` → se publica en la raíz (`/`);
-- cualquier otro repositorio → se publica en `/<repositorio>/`.
-
-Por eso los enlaces e imágenes internas pasan por `ruta()`
-(`src/lib/rutas.ts`). Para un dominio propio o para forzar otra base:
+Para actualizarla, después de cambiar fichas o imágenes:
 
 ```powershell
-$env:ASTRO_SITE='https://factoria.ejemplo.com'
-$env:ASTRO_BASE='/'
-npm run build
+npm run publicar
 ```
+
+Compila con el `base` correcto, recrea la rama `gh-pages` y la sube. GitHub Pages
+tarda alrededor de un minuto en refrescar.
+
+El detalle del despliegue —y cómo pasarlo a GitHub Actions cuando el token tenga
+permiso `workflow`— está en [`docs/despliegue/README.md`](docs/despliegue/README.md).
 
 ## Criterios de diseño y contenido
 
@@ -119,5 +111,8 @@ npm run build
 
 ## Estado
 
-Prototipo terminado y listo para publicar. El repositorio sigue **sin remoto**:
-no se ha subido nada a internet todavía.
+Publicada en GitHub Pages: <https://javiflozano.github.io/factoria-de-proyectos/>.
+
+- Repositorio: <https://github.com/javiflozano/factoria-de-proyectos> (público).
+- Rama `main`: código fuente. Rama `gh-pages`: sitio compilado y servido.
+- Pendiente: sustituir los datos de ejemplo del profesorado y revisar los textos.

@@ -25,7 +25,8 @@ ha subido nada a internet.
 
 | Pieza | Estado |
 |---|---|
-| Repositorio git | `main`, 5 commits, **sin remoto** |
+| Repositorio | <https://github.com/javiflozano/factoria-de-proyectos> (público) |
+| Ramas | `main` (código, 1 commit) y `gh-pages` (sitio compilado) |
 | Proyecto Astro | 7.4.12, TypeScript strict, salida estática |
 | Colección de contenido | `proyectos` con esquema Zod (incluye `videos`) |
 | Páginas | 5 páginas / 12 rutas |
@@ -33,8 +34,7 @@ ha subido nada a internet.
 | Imágenes | 8 optimizadas, ninguna con personas identificables |
 | Vídeos | 8 vídeos de YouTube incrustados bajo demanda |
 | Equipo | 7 fichas, **datos de ejemplo** (ver «Pendientes») |
-| Build | correcto en local, con base `/` y con base `/factoria-de-proyectos` |
-| Publicación | workflow de GitHub Pages listo; **sin ejecutar** |
+| Publicación | rama `gh-pages`, comprobada en vivo |
 
 ## Datos confirmados por el docente (18/11/2026)
 
@@ -49,28 +49,28 @@ ha subido nada a internet.
 
 ## Cómo se publica
 
-`astro.config.mjs` deduce el `base` de `GITHUB_REPOSITORY`:
+`npm run publicar` compila con `base=/factoria-de-proyectos`, recrea la rama
+`gh-pages` en un worktree temporal y la sube. GitHub Pages sirve esa rama; tarda
+alrededor de un minuto en refrescar.
 
-- repositorio `<usuario>.github.io` → se publica en `/`;
-- cualquier otro repositorio → se publica en `/<repositorio>/`.
+El workflow de GitHub Actions está escrito y probado, pero **el token guardado en
+el equipo no tiene permiso `workflow`**, y GitHub rechaza cualquier push que cree
+o modifique `.github/workflows/`. Por eso vive en
+`docs/despliegue/deploy.yml.ejemplo`, con las instrucciones para activarlo.
 
-Los enlaces e imágenes internas pasan por `ruta()` (`src/lib/rutas.ts`), así que
-funcionan en los dos casos. El despliegue lo hace
-`.github/workflows/deploy.yml` en cada `push` a `main`, usando la fuente
-«GitHub Actions» de Pages.
+Los enlaces e imágenes internas pasan por `ruta()` (`src/lib/rutas.ts`), que
+aplica el `base`; por eso el sitio funciona igual en la raíz que en una
+subcarpeta.
 
 ## Decisiones pendientes
 
-1. **Publicar**: hace falta cuenta/organización de GitHub, nombre del
-   repositorio y visibilidad (público o privado). Crear el remoto y hacer el
-   primer `push` requiere confirmación expresa.
-2. **Datos del profesorado**: `src/data/profesorado.ts` tiene los nombres reales
-   con **cargos y reseñas inventados**. Hay que sustituirlos (o pedir el texto al
-   docente) antes de publicar, o publicar sabiendo que son de ejemplo.
-3. **Fotografías del equipo**: no hay ninguna. Si se añaden, hacen falta permisos.
-4. **Dominio propio**: si se quiere, se configura con `ASTRO_SITE` y `ASTRO_BASE`
+1. **Datos del profesorado**: `src/data/profesorado.ts` tiene los nombres reales
+   con **cargos y reseñas inventados**, publicados tal cual por indicación del
+   docente. Hay que sustituirlos por los definitivos.
+2. **Fotografías del equipo**: no hay ninguna. Si se añaden, hacen falta permisos.
+3. **Dominio propio**: si se quiere, se configura con `ASTRO_SITE` y `ASTRO_BASE`
    y un `CNAME`; hoy no existe.
-5. **Revisión de textos** por el docente: están ampliados con fuentes públicas,
+4. **Revisión de textos** por el docente: están ampliados con fuentes públicas,
    pero conviene que los valide quien conoce los proyectos.
 6. **Consentimiento de imágenes** del alumnado, si se quieren añadir fotos con
    personas (las de la tertulia, el hogar y los premios están descartadas).
